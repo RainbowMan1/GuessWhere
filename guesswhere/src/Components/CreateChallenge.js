@@ -20,22 +20,63 @@ function CreateChallenge(props) {
     setOpen(false);
   };
 
-  const handleChallengeSubmit = async () => {
-    subchallenges.map((subchallenge) => {
+  const getFileUrls = async (subchallenge) => {
+    var fileUrls = [];
+    await Promise.all(
       subchallenge.files.map(async (file) => {
         const storageRef = firebase.storage().ref();
         const fileRef = storageRef.child(file.name);
         await fileRef.put(file);
         const fileUrl = await fileRef.getDownloadURL();
-      });
-    });
-    // const file = files[0];
-
-    // await db.collection("sub-challenges").doc().set({
-    //   uid: currentUser.uid,
-    //   images: fileUrl,
-    // });
+        fileUrls = [...fileUrls, fileUrl];
+      })
+    );
+    return fileUrls;
   };
+
+  const addSubChallenges = async () => {
+    var subRefs = [];
+    await Promise.all(
+      subchallenges.map(async (subchallenge) => {
+        const fileUrls = await getFileUrls(subchallenge);
+        await db
+          .collection("Sub-challenges")
+          .add({
+            images: fileUrls,
+            location: new firebase.firestore.GeoPoint(
+              subchallenge.marker.lat,
+              subchallenge.marker.lng
+            ),
+          })
+          .then(function (docRef) {
+            subRefs = [...subRefs, docRef];
+          })
+          .catch(function (error) {
+            console.error("Error adding document: ", error);
+          });
+      })
+    );
+    return subRefs;
+  };
+
+  const handleChallengeSubmit = async () => {
+    const subRefs = await addSubChallenges();
+    await db
+      .collection("Challenges")
+      .add({
+        uid: currentUser.uid,
+        subchallenges: subRefs,
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
+    console.log("Done");
+  };
+
+  // const file = files[0];
+
+  //   images: fileUrl,
+
   const handleSubChallengeSubmit = async (files, marker) => {
     const subchallenge = { files, marker };
     setSubchallenges((current) => [...current, subchallenge]);
