@@ -1,6 +1,7 @@
 import { Button, makeStyles } from "@material-ui/core";
-import React from "react";
-import { useHistory } from "react-router-dom";
+import React, { useContext } from "react";
+import { Redirect } from "react-router-dom";
+import { AuthContext } from "../AuthProvider";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -19,15 +20,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Home() {
-  const history = useHistory();
-  const startBoggle = () => {
-    history.push(`/`);
-  };
   const classes = useStyles();
+  const { currentUser } = useContext(AuthContext);
+
+  if (currentUser) {
+    return <Redirect to="/Browse" />;
+  }
   return (
     <div className={classes.container}>
       <div className={classes.center}>
-        <Button color="primary" variant="contained" onClick={startBoggle}>
+        <Button color="primary" variant="contained">
           Start
         </Button>
       </div>

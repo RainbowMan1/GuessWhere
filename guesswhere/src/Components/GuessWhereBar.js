@@ -23,7 +23,7 @@ export default function GuessWhereBar() {
   const classes = useStyles();
   const history = useHistory();
   const { currentUser } = useContext(AuthContext);
-
+  console.log(currentUser);
   const onLogin = () => {
     console.log("hello");
     var provider = new firebase.auth.GoogleAuthProvider();
@@ -46,17 +46,13 @@ export default function GuessWhereBar() {
     history.push(`/Browse`);
   };
 
-  const goHome = () => {
-    history.push(`/`);
-  };
-
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Button color="inherit" onClick={goHome} className={classes.home}>
+          <Typography variant="h6" className={classes.home}>
             GuessWhere
-          </Button>
+          </Typography>
           {currentUser ? (
             <div className={classes.loggedin}>
               <Button color="inherit" onClick={browseChallenges}>
