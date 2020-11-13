@@ -132,7 +132,7 @@ function AddSubChallengeModal(props) {
         <div>
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
-            zoom={0}
+            zoom={3}
             center={center}
             onClick={handleMapClick}
           >

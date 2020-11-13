@@ -1,7 +1,5 @@
 import { Button, makeStyles } from "@material-ui/core";
-import React, { useContext } from "react";
-import { Redirect } from "react-router-dom";
-import { AuthContext } from "../AuthProvider";
+import React from "react";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -21,11 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Home() {
   const classes = useStyles();
-  const { currentUser } = useContext(AuthContext);
 
-  if (currentUser) {
-    return <Redirect to="/Browse" />;
-  }
   return (
     <div className={classes.container}>
       <div className={classes.center}>

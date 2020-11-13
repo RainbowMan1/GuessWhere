@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AddSubChallengeModal from "./AddSubChallengeModal";
 import firebase from "../firebase";
 import { AuthContext } from "../AuthProvider";
@@ -11,6 +11,7 @@ function CreateChallenge(props) {
   const { currentUser } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [subchallenges, setSubchallenges] = useState([]);
+  const [submitDisabled, setSubmitDisabled] = useState(true);
 
   const handleOpen = () => {
     setOpen(true);
@@ -81,6 +82,13 @@ function CreateChallenge(props) {
     const subchallenge = { files, marker };
     setSubchallenges((current) => [...current, subchallenge]);
   };
+
+  useEffect(() => {
+    if (subchallenges.length !== 0) {
+      setSubmitDisabled(false);
+    }
+  }, [subchallenges]);
+
   console.log(subchallenges);
   if (!currentUser) {
     return <Redirect to="/" />;
@@ -102,7 +110,12 @@ function CreateChallenge(props) {
             <p key={i}>{subchallenge.marker.toString()}</p>
           ))}
         </ul>
-        <Button size="small" color="primary" onClick={handleChallengeSubmit}>
+        <Button
+          size="small"
+          color="primary"
+          onClick={handleChallengeSubmit}
+          disabled={submitDisabled}
+        >
           Submit
         </Button>
       </div>

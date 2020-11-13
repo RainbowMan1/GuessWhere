@@ -21,14 +21,14 @@ function BrowseChallenges(props) {
   const classes = useStyles();
   const [challenges, setChallenges] = useState([]);
   const { currentUser } = useContext(AuthContext);
-  /*useEffect(() => {
+  useEffect(() => {
     const fetchChallenges = async () => {
       const data = await db.collection("Challenges").get();
       setChallenges(data.docs);
+      console.log(data.docs[0].docs);
     };
     fetchChallenges();
-  }, [challenges]);
-  */
+  }, []);
 
   if (!currentUser) {
     return <Redirect to="/" />;
