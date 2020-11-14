@@ -107,7 +107,7 @@ function PlayChallenge(props) {
   }, []);
 
   if (loadError) return "Error";
-  if (!isLoaded) return "Loading...";
+  if (!isLoaded || subchallenges.length === 0) return "Loading...";
   return (
     <div>
       <Grid
