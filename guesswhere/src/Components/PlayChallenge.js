@@ -1,9 +1,11 @@
 import { Button, Grid } from "@material-ui/core";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Carousel from "react-material-ui-carousel";
 import { AuthContext } from "../AuthProvider";
 import firebase from "../firebase";
+import ChallengeResult from "./ChallengeResult";
+import SubChallengeResult from "./SubChallengeResult";
 
 const db = firebase.firestore();
 
@@ -28,30 +30,23 @@ const center = {
   lng: -100.548059,
 };
 
-const getDistance = (geopoint, marker2) => {
-  const R = 6371e3; // metres
-  const φ1 = (geopoint.latitude * Math.PI) / 180; // φ, λ in radians
-  const φ2 = (marker2.lat * Math.PI) / 180;
-  const Δφ = ((marker2.lat - geopoint.latitude) * Math.PI) / 180;
-  const Δλ = ((marker2.lng - geopoint.longitude) * Math.PI) / 180;
-
-  const a =
-    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  const d = R * c; // in metres
-  return d;
-};
-
 function PlayChallenge(props) {
   const { currentUser } = useContext(AuthContext);
+
   const [mapstyle, setMapStyle] = useState(mapContainerStyleNoMouse);
+  const [subchallenges, setSubchallenges] = useState([]);
+  const [totalMarkers, setTotalMarkers] = useState([]);
+  const [totalPoints, setTotalPoints] = useState(0);
+  const [currentChallenge, setCurrentChallenge] = useState(0);
+
+  const [showResult, setShowResult] = useState(false);
+  const [marker, setMarker] = useState(null);
+  const [currentMarkers, setCurrentMarkers] = useState(null);
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
-  const [marker, setMarker] = useState(null);
-  const [subchallenges, setSubchallenges] = useState([]);
+
   const { match } = props;
   const { params } = match;
   const { challengeId } = params;
@@ -71,9 +66,17 @@ function PlayChallenge(props) {
   };
 
   const handleGuess = () => {
-    console.log(subchallenges[0].location);
-    console.log(marker);
-    console.log(getDistance(subchallenges[0].location, marker));
+    console.log(subchallenges[currentChallenge].location);
+    const actualMarker = {
+      lat: subchallenges[currentChallenge].location.latitude,
+      lng: subchallenges[currentChallenge].location.longitude,
+    };
+    const markersToSend = {
+      actual: actualMarker,
+      guess: marker,
+    };
+    setCurrentMarkers(markersToSend);
+    setShowResult(true);
   };
 
   const handleMapClick = (event) => {
@@ -106,8 +109,35 @@ function PlayChallenge(props) {
     fetchChallenge();
   }, []);
 
+  const handleContinue = useCallback(
+    (points) => {
+      console.log("updating");
+      setTotalPoints((currentPoints) => currentPoints + points);
+      setMarker(null);
+      setTotalMarkers((total) => [...total, currentMarkers]);
+      setCurrentMarkers(null);
+      setCurrentChallenge((current) => current + 1);
+      setShowResult(false);
+    },
+    [currentChallenge, currentMarkers]
+  );
+
   if (loadError) return "Error";
   if (!isLoaded || subchallenges.length === 0) return "Loading...";
+  if (currentChallenge >= subchallenges.length) {
+    console.log("here");
+    return (
+      <ChallengeResult totalPoints={totalPoints} totalMarkers={totalMarkers} />
+    );
+  }
+  if (showResult) {
+    return (
+      <SubChallengeResult
+        Markers={currentMarkers}
+        onContinue={handleContinue}
+      />
+    );
+  }
   return (
     <div>
       <Grid
@@ -117,10 +147,10 @@ function PlayChallenge(props) {
         justify="center"
         spacing={0}
       >
-        <Grid item xs={0} sm={2} md={2} lg={2} />
+        <Grid item xs={"auto"} sm={2} md={2} lg={2} />
         <Grid item xs={12} sm={8} md={8} lg={8}>
           <Carousel>
-            {subchallenges[0].images.map((item, i) => (
+            {subchallenges[currentChallenge].images.map((item, i) => (
               <img src={item} alt={i} key={i} height={"550"} width={"800"} />
             ))}
           </Carousel>
@@ -133,7 +163,7 @@ function PlayChallenge(props) {
             Guess
           </Button>
         </Grid>
-        <Grid item xs={0} sm={2} md={2} lg={2} />
+        <Grid item xs={"auto"} sm={2} md={2} lg={2} />
       </Grid>
       <div onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
         <GoogleMap
