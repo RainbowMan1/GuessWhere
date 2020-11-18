@@ -25,7 +25,7 @@ function BrowseChallenges(props) {
     const fetchChallenges = async () => {
       const data = await db.collection("Challenges").get();
       setChallenges(data.docs);
-      console.log(data.docs[0].docs);
+      console.log(data.docs);
     };
     fetchChallenges();
   }, []);
@@ -47,7 +47,7 @@ function BrowseChallenges(props) {
             <ChallengeCard
               name={doc.data().name}
               challengeId={doc.id}
-              hscore={doc.data().highscore}
+              uid={doc.data().uid}
               by={doc.data().By}
             />
           </Grid>
