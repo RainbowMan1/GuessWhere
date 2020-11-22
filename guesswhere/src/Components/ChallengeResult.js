@@ -1,6 +1,7 @@
 import { Button, Typography } from "@material-ui/core";
 import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 const mapContainer = {
   left: "0%",
@@ -8,9 +9,14 @@ const mapContainer = {
   width: "100vw",
 };
 
-const center = {
-  lat: 39.693649,
-  lng: -100.548059,
+const getMidpoint = (actualMarker, guessMarker) => {
+  var lat1 = actualMarker.lat;
+  var lng1 = actualMarker.lng;
+  var lat2 = guessMarker.lat;
+  var lng2 = guessMarker.lng;
+  const lat3 = (lat1 + lat2) / 2;
+  const lng3 = (lng1 + lng2) / 2;
+  return { lat: lat3, lng: lng3 };
 };
 
 const lineSymbol = {
@@ -20,38 +26,90 @@ const lineSymbol = {
 };
 
 function ChallengeResult(props) {
-  const handleContinue = () => {};
+  const history = useHistory();
+  const midpoints = [];
+  props.totalMarkers.forEach((element) =>
+    midpoints.push(getMidpoint(element.actual, element.guess))
+  );
+  var center = midpoints[0];
+  for (var i = 0; i < midpoints.length - 1; i++) {
+    center = getMidpoint(center, midpoints[i + 1]);
+  }
 
-  const pathCoordinates = [...props.totalMarkers];
+  const handleContinue = () => {
+    history.replace({ pathname: `/Browse/` });
+  };
+
+  const getPathCoordinates = (total) => {
+    const pathArray = [];
+    total.forEach((markers) => {
+      const path = [
+        { lat: markers.actual.lat, lng: markers.actual.lng },
+        { lat: markers.guess.lat, lng: markers.guess.lng },
+      ];
+      pathArray.push(path);
+    });
+    return pathArray;
+  };
+  const pathCoordinates = getPathCoordinates(props.totalMarkers);
+
   console.log(pathCoordinates);
   return (
     <div>
       <GoogleMap mapContainerStyle={mapContainer} zoom={3} center={center}>
         {props.totalMarkers.map((markers, i) => {
-          console.log(markers.actual);
-
-          <Marker
-            position={{ lat: markers.actual.lat, lng: markers.actual.lng }}
-          />;
+          return (
+            <Marker
+              key={i}
+              position={markers.guess}
+              icon={{
+                url: `/Images/guess.png`,
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(15, 15),
+                scaledSize: new window.google.maps.Size(30, 30),
+              }}
+            />
+          );
         })}
-        <Polyline
-          path={pathCoordinates}
-          geodesic={true}
-          options={{
-            strokeColor: "#ff2527",
-            strokeOpacity: 0,
-            strokeWeight: 2,
-            icons: [
-              {
-                icon: lineSymbol,
-                offset: "0",
-                repeat: "20px",
-              },
-            ],
-          }}
-        />
+        {props.totalMarkers.map((markers, i) => {
+          return (
+            <Marker
+              key={i}
+              position={markers.actual}
+              icon={{
+                url: `/Images/flag.png`,
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(15, 15),
+                scaledSize: new window.google.maps.Size(30, 30),
+              }}
+            />
+          );
+        })}
+        {pathCoordinates.map((path, i) => {
+          return (
+            <Polyline
+              key={i}
+              path={path}
+              geodesic={true}
+              options={{
+                strokeColor: "#ff2527",
+                strokeOpacity: 0,
+                strokeWeight: 2,
+                icons: [
+                  {
+                    icon: lineSymbol,
+                    offset: "0",
+                    repeat: "20px",
+                  },
+                ],
+              }}
+            />
+          );
+        })}
       </GoogleMap>
-      <Typography variant="h6">Your total score is {}</Typography>
+      <Typography variant="h6">
+        Your total score is {parseFloat(props.totalPoints)}
+      </Typography>
       <Button color="primary" variant="contained" onClick={handleContinue}>
         Continue
       </Button>

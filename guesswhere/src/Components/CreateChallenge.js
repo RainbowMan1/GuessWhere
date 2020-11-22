@@ -3,7 +3,7 @@ import AddSubChallengeModal from "./AddSubChallengeModal";
 import firebase from "../firebase";
 import { AuthContext } from "../AuthProvider";
 import { Redirect } from "react-router-dom";
-import { Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 
 const db = firebase.firestore();
 
@@ -12,7 +12,7 @@ function CreateChallenge(props) {
   const [open, setOpen] = useState(false);
   const [subchallenges, setSubchallenges] = useState([]);
   const [submitDisabled, setSubmitDisabled] = useState(true);
-
+  const [wordValue, setWordValue] = useState("");
   const handleOpen = () => {
     setOpen(true);
   };
@@ -74,28 +74,38 @@ function CreateChallenge(props) {
     console.log("Done");
   };
 
-  // const file = files[0];
-
-  //   images: fileUrl,
-
   const handleSubChallengeSubmit = async (files, marker) => {
     const subchallenge = { files, marker };
     setSubchallenges((current) => [...current, subchallenge]);
   };
 
-  useEffect(() => {
-    if (subchallenges.length !== 0) {
-      setSubmitDisabled(false);
-    }
-  }, [subchallenges]);
+  const handleTextOnChange = (e) => {
+    setWordValue(e.target.value);
+  };
 
-  console.log(subchallenges);
+  useEffect(() => {
+    if (subchallenges.length !== 0 && wordValue !== "") {
+      setSubmitDisabled(false);
+    } else {
+      setSubmitDisabled(true);
+    }
+  }, [subchallenges, wordValue]);
+
+  //console.log(subchallenges);
   if (!currentUser) {
     return <Redirect to="/" />;
   }
   return (
     <div>
       <h2>Create Challenge</h2>
+      <div>
+        <TextField
+          id="standard-basic"
+          label="Challenge Name"
+          value={wordValue}
+          onChange={handleTextOnChange}
+        />
+      </div>
       <div>
         <Button size="small" color="primary" onClick={handleOpen}>
           Add a Sub Challenge

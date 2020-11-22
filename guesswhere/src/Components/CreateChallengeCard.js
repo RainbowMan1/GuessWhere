@@ -28,7 +28,7 @@ function CreateChallengeCard(props) {
       <CardActionArea onClick={routeToCreate}>
         <CardMedia
           className={classes.media}
-          image="../Images/add.png"
+          image="/Images/add.png"
           title="Create Challenge"
         />
         <CardContent>

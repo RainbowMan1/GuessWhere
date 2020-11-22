@@ -112,6 +112,7 @@ function PlayChallenge(props) {
   const handleContinue = useCallback(
     (points) => {
       console.log("updating");
+      console.log(points);
       setTotalPoints((currentPoints) => currentPoints + points);
       setMarker(null);
       setTotalMarkers((total) => [...total, currentMarkers]);
@@ -125,7 +126,7 @@ function PlayChallenge(props) {
   if (loadError) return "Error";
   if (!isLoaded || subchallenges.length === 0) return "Loading...";
   if (currentChallenge >= subchallenges.length) {
-    console.log("here");
+    console.log(totalPoints);
     return (
       <ChallengeResult totalPoints={totalPoints} totalMarkers={totalMarkers} />
     );
@@ -172,7 +173,15 @@ function PlayChallenge(props) {
           center={center}
           onClick={handleMapClick}
         >
-          <Marker position={marker} />
+          <Marker
+            position={marker}
+            icon={{
+              url: `/Images/guess.png`,
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+              scaledSize: new window.google.maps.Size(30, 30),
+            }}
+          />
         </GoogleMap>
       </div>
     </div>

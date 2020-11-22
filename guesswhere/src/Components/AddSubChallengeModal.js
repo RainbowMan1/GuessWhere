@@ -136,7 +136,15 @@ function AddSubChallengeModal(props) {
             center={center}
             onClick={handleMapClick}
           >
-            <Marker position={marker} />
+            <Marker
+              position={marker}
+              icon={{
+                url: `/Images/flag.png`,
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(15, 15),
+                scaledSize: new window.google.maps.Size(30, 30),
+              }}
+            />
           </GoogleMap>
         </div>
         <Button color="primary" variant="contained" onClick={closeModal}>

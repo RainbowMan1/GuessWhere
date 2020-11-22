@@ -34,10 +34,7 @@ export default function ChallengeCard(props) {
           Play
         </Button>
         <Typography gutterBottom variant="body1">
-          Highscore: {props.hscore}
-        </Typography>
-        <Typography gutterBottom variant="body1">
-          By: {props.by}
+          Created By: {props.uid}
         </Typography>
       </CardContent>
     </Card>

@@ -7,10 +7,41 @@ const mapContainer = {
   height: "65vh",
   width: "100vw",
 };
+/* This is for actual midpoint on a curved surface like the earth
+const getMidpoint = (actualMarker, guessMarker) => {
+  var lat1 = actualMarker.lat;
+  var lng1 = actualMarker.lng;
+  var lat2 = guessMarker.lat;
+  var lng2 = guessMarker.lng;
 
-const center = {
-  lat: 39.693649,
-  lng: -100.548059,
+  //-- Convert to radians
+  lat1 = lat1 * (Math.PI / 180);
+  lat2 = lat2 * (Math.PI / 180);
+  lng1 = lng1 * (Math.PI / 180);
+  lng2 = lng2 * (Math.PI / 180);
+  var dLng = lng2 - lng1;
+
+  var bX = Math.cos(lat2) * Math.cos(dLng);
+  var bY = Math.cos(lat2) * Math.sin(dLng);
+  var lat3 = Math.atan2(
+    Math.sin(lat1) + Math.sin(lat2),
+    Math.sqrt((Math.cos(lat1) + bX) * (Math.cos(lat1) + bX) + bY * bY)
+  );
+  var lng3 = lng1 + Math.atan2(bY, Math.cos(lat1) + bX);
+  lat3 = (lat3 * 180) / Math.PI;
+  lng3 = (lng3 * 180) / Math.PI;
+  //-- Return result
+  return { lat: lat3, lng: lng3 };
+};*/
+
+const getMidpoint = (actualMarker, guessMarker) => {
+  var lat1 = actualMarker.lat;
+  var lng1 = actualMarker.lng;
+  var lat2 = guessMarker.lat;
+  var lng2 = guessMarker.lng;
+  const lat3 = (lat1 + lat2) / 2;
+  const lng3 = (lng1 + lng2) / 2;
+  return { lat: lat3, lng: lng3 };
 };
 
 const getDistance = (actualMarker, guessMarker) => {
@@ -45,6 +76,7 @@ const getPoints = (distance) => {
 
 function SubChallengeResult(props) {
   const distance = getDistance(props.Markers.actual, props.Markers.guess);
+  const center = getMidpoint(props.Markers.actual, props.Markers.guess);
   const points = getPoints(distance);
   const pathCoordinates = [
     { lat: props.Markers.actual.lat, lng: props.Markers.actual.lng },
@@ -52,13 +84,29 @@ function SubChallengeResult(props) {
   ];
   console.log(props.Markers.actual);
   const handleContinue = () => {
-    props.onContinue();
+    props.onContinue(Number(points));
   };
   return (
     <div>
       <GoogleMap mapContainerStyle={mapContainer} zoom={3} center={center}>
-        <Marker position={props.Markers.actual} />
-        <Marker position={props.Markers.guess} />
+        <Marker
+          position={props.Markers.actual}
+          icon={{
+            url: `/Images/flag.png`,
+            origin: new window.google.maps.Point(0, 0),
+            anchor: new window.google.maps.Point(15, 15),
+            scaledSize: new window.google.maps.Size(30, 30),
+          }}
+        />
+        <Marker
+          position={props.Markers.guess}
+          icon={{
+            url: `/Images/guess.png`,
+            origin: new window.google.maps.Point(0, 0),
+            anchor: new window.google.maps.Point(15, 15),
+            scaledSize: new window.google.maps.Size(30, 30),
+          }}
+        />
         <Polyline
           path={pathCoordinates}
           geodesic={true}
