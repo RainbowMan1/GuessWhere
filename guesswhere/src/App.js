@@ -6,6 +6,7 @@ import BrowseChallenges from "./Components/BrowseChallenges";
 import { AuthProvider } from "./AuthProvider";
 import PlayChallenge from "./Components/PlayChallenge";
 import CreateChallenge from "./Components/CreateChallenge";
+import RandomChallenge from "./Components/RandomChallenge";
 
 require("dotenv").config();
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/Browse" exact component={BrowseChallenges} />
           <Route path="/Create" exact component={CreateChallenge} />
+          <Route path="/Random" exact component={RandomChallenge} />
           <Route
             path="/Challenge/:challengeId"
             render={(props) => <PlayChallenge {...props} />}

@@ -4,6 +4,7 @@ import firebase from "../firebase";
 import { AuthContext } from "../AuthProvider";
 import { Redirect } from "react-router-dom";
 import { Button, TextField } from "@material-ui/core";
+import SubChallengeBox from "./SubChallengeBox";
 
 const db = firebase.firestore();
 
@@ -72,6 +73,8 @@ function CreateChallenge(props) {
         console.error("Error adding document: ", error);
       });
     console.log("Done");
+    setSubchallenges([]);
+    setWordValue("");
   };
 
   const handleSubChallengeSubmit = async (files, marker) => {
@@ -81,6 +84,12 @@ function CreateChallenge(props) {
 
   const handleTextOnChange = (e) => {
     setWordValue(e.target.value);
+  };
+
+  const handleRemoveSubChallenge = (index) => {
+    var tempsubarray = [...subchallenges];
+    tempsubarray.splice(index, 1);
+    setSubchallenges(tempsubarray);
   };
 
   useEffect(() => {
@@ -115,11 +124,14 @@ function CreateChallenge(props) {
           handleClose={handleClose}
           onSubmit={handleSubChallengeSubmit}
         />
-        <ul>
-          {subchallenges.map((subchallenge, i) => (
-            <p key={i}>{subchallenge.marker.toString()}</p>
-          ))}
-        </ul>
+        {subchallenges.map((subchallenge, i) => (
+          <SubChallengeBox
+            key={i}
+            index={i}
+            numImages={subchallenge.files.length}
+            handleRemove={handleRemoveSubChallenge}
+          />
+        ))}
         <Button
           size="small"
           color="primary"

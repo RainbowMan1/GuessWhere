@@ -46,6 +46,10 @@ export default function GuessWhereBar() {
     history.push(`/Browse`);
   };
 
+  const playRandomChallenge = () => {
+    history.push(`/Random`);
+  };
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -55,6 +59,9 @@ export default function GuessWhereBar() {
           </Typography>
           {currentUser ? (
             <div className={classes.loggedin}>
+              <Button color="inherit" onClick={playRandomChallenge}>
+                Random Challenge
+              </Button>
               <Button color="inherit" onClick={browseChallenges}>
                 Challenges
               </Button>
