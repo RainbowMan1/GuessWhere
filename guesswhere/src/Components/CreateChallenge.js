@@ -3,8 +3,10 @@ import AddSubChallengeModal from "./AddSubChallengeModal";
 import firebase from "../firebase";
 import { AuthContext } from "../AuthProvider";
 import { Redirect } from "react-router-dom";
-import { Button, TextField } from "@material-ui/core";
+import { Button, Snackbar, TextField } from "@material-ui/core";
 import SubChallengeBox from "./SubChallengeBox";
+import { v4 as uuidv4 } from "uuid";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const db = firebase.firestore();
 
@@ -13,7 +15,19 @@ function CreateChallenge(props) {
   const [open, setOpen] = useState(false);
   const [subchallenges, setSubchallenges] = useState([]);
   const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [uploading, setUploading] = useState(false);
   const [wordValue, setWordValue] = useState("");
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [errorSnackOpen, setErrorSnackOpen] = useState(false);
+
+  const handleSnackBarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackOpen(false);
+    setErrorSnackOpen(false);
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -27,7 +41,7 @@ function CreateChallenge(props) {
     await Promise.all(
       subchallenge.files.map(async (file) => {
         const storageRef = firebase.storage().ref();
-        const fileRef = storageRef.child(file.name);
+        const fileRef = storageRef.child(uuidv4());
         await fileRef.put(file);
         const fileUrl = await fileRef.getDownloadURL();
         fileUrls = [...fileUrls, fileUrl];
@@ -54,7 +68,7 @@ function CreateChallenge(props) {
             subRefs = [...subRefs, docRef];
           })
           .catch(function (error) {
-            console.error("Error adding document: ", error);
+            setErrorSnackOpen(true);
           });
       })
     );
@@ -62,6 +76,7 @@ function CreateChallenge(props) {
   };
 
   const handleChallengeSubmit = async () => {
+    setUploading(true);
     const subRefs = await addSubChallenges();
     await db
       .collection("Challenges")
@@ -72,7 +87,8 @@ function CreateChallenge(props) {
       .catch(function (error) {
         console.error("Error adding document: ", error);
       });
-    console.log("Done");
+    setSnackOpen(true);
+    setUploading(false);
     setSubchallenges([]);
     setWordValue("");
   };
@@ -96,7 +112,9 @@ function CreateChallenge(props) {
     if (subchallenges.length !== 0 && wordValue !== "") {
       setSubmitDisabled(false);
     } else {
-      setSubmitDisabled(true);
+      if (!uploading) {
+        setSubmitDisabled(true);
+      }
     }
   }, [subchallenges, wordValue]);
 
@@ -141,6 +159,34 @@ function CreateChallenge(props) {
           Submit
         </Button>
       </div>
+      <Snackbar
+        open={snackOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackBarClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackBarClose}
+          severity="success"
+        >
+          Challenge successfully uploaded!
+        </MuiAlert>
+      </Snackbar>
+      <Snackbar
+        open={errorSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackBarClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackBarClose}
+          severity="error"
+        >
+          Error Occured When Uploading Challenge!
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 }
