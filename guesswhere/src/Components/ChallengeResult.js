@@ -1,13 +1,28 @@
 import { Button, Typography } from "@material-ui/core";
 import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
 import React from "react";
+import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import Rating from 'material-ui-rating';
+import firebase from "../firebase";
+import { AuthContext } from "../AuthProvider";
+
+const db = firebase.firestore();
+
+const handleRating =(value) =>{
+  alert('onChange ' + value);
+
+  //Add ChallID and UID
+  db.collection('Challenge Rating').add({Rating: value});
+};
 
 const mapContainer = {
   left: "0%",
   height: "65vh",
   width: "100vw",
 };
+
+
 
 const getMidpoint = (actualMarker, guessMarker) => {
   var lat1 = actualMarker.lat;
@@ -26,6 +41,7 @@ const lineSymbol = {
 };
 
 function ChallengeResult(props) {
+  const { currentUser } = useContext(AuthContext);
   const history = useHistory();
   const midpoints = [];
   props.totalMarkers.forEach((element) =>
@@ -38,6 +54,8 @@ function ChallengeResult(props) {
 
   const handleContinue = () => {
     history.replace({ pathname: `/Browse/` });
+    //Add in challID and UID 
+    db.collection('Challenge Leaderboards').add({Score: parseFloat(props.totalPoints)});
   };
 
   const getPathCoordinates = (total) => {
@@ -110,10 +128,15 @@ function ChallengeResult(props) {
       <Typography variant="h6">
         Your total score is {parseFloat(props.totalPoints)}
       </Typography>
+      <Rating
+      value={5}
+      max={5}
+      onChange={handleRating}
+    />
       <Button color="primary" variant="contained" onClick={handleContinue}>
         Continue
       </Button>
-    </div>
+    </div>  
   );
 }
 
