@@ -6,16 +6,21 @@ import { useHistory } from "react-router-dom";
 import Rating from 'material-ui-rating';
 import firebase from "../firebase";
 import { AuthContext } from "../AuthProvider";
-
+ 
 const db = firebase.firestore();
-
+const url = new URL(window.location.href).pathname.split('/');
+const cid = url[2];
+const uid = url[3];
+ 
 const handleRating =(value) =>{
   alert('onChange ' + value);
-
-  //Add ChallID and UID
-  db.collection('Challenge Rating').add({Rating: value});
+ 
+  alert (cid);
+  alert (uid);
+  //Add CID and UID
+  db.collection('Challenge Rating').add({Rating: value ,ChallengeID: cid,uid: uid});
 };
-
+ 
 const mapContainer = {
   left: "0%",
   height: "65vh",
@@ -33,13 +38,13 @@ const getMidpoint = (actualMarker, guessMarker) => {
   const lng3 = (lng1 + lng2) / 2;
   return { lat: lat3, lng: lng3 };
 };
-
+ 
 const lineSymbol = {
   path: "M 0,-1 0,1",
   strokeOpacity: 1,
   scale: 4,
 };
-
+ 
 function ChallengeResult(props) {
   const { currentUser } = useContext(AuthContext);
   const history = useHistory();
@@ -51,13 +56,15 @@ function ChallengeResult(props) {
   for (var i = 0; i < midpoints.length - 1; i++) {
     center = getMidpoint(center, midpoints[i + 1]);
   }
-
+ 
   const handleContinue = () => {
     history.replace({ pathname: `/Browse/` });
     //Add in challID and UID 
-    db.collection('Challenge Leaderboards').add({Score: parseFloat(props.totalPoints)});
+    db.collection('Challenge Leaderboards').add({Score: parseFloat(props.totalPoints),
+    uid: uid,
+    ChallengeID: cid});
   };
-
+ 
   const getPathCoordinates = (total) => {
     const pathArray = [];
     total.forEach((markers) => {
@@ -70,7 +77,7 @@ function ChallengeResult(props) {
     return pathArray;
   };
   const pathCoordinates = getPathCoordinates(props.totalMarkers);
-
+ 
   console.log(pathCoordinates);
   return (
     <div>
@@ -139,5 +146,6 @@ function ChallengeResult(props) {
     </div>  
   );
 }
-
+ 
 export default ChallengeResult;
+ 
