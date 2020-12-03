@@ -31,6 +31,7 @@ export default function ChallengeCard(props) {
   const history = useHistory();
   const [challengeCreatorName, setChallengeCreatorName] = useState("");
   const [imageUrl, setImageURL] = useState("");
+  const [challengeName, setChallengeName] = useState("");
   const routeToChallenge = () => {
     //Added UID to URL path so it could be save with rating and high score
     history.replace({
@@ -53,6 +54,8 @@ export default function ChallengeCard(props) {
         .collection("Challenges")
         .doc(props.challengeId)
         .get();
+      const name = challengedata.data().name;
+      setChallengeName(name);
       const subchallenge = challengedata.data().subchallenges[0];
       const subChallengedata = await db
         .collection("Sub-challenges")
@@ -74,7 +77,7 @@ export default function ChallengeCard(props) {
         <CardMedia
           className={classes.media}
           image={imageUrl}
-          title="Challenge Name"
+          title="Challenge"
         />
         <CardContent>
           <Typography gutterBottom variant="h5">

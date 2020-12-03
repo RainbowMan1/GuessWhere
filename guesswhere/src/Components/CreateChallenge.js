@@ -83,6 +83,7 @@ function CreateChallenge(props) {
       .add({
         uid: currentUser.uid,
         subchallenges: subRefs,
+        name: wordValue,
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
