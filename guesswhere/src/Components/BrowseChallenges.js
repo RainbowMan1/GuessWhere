@@ -35,23 +35,31 @@ function BrowseChallenges(props) {
   }
   return (
     <div>
-      <Typography variant="h4" className={classes.browseheading}>
-        Browse Challenges
-      </Typography>
-      <Grid container direction="row" alignItems="center" spacing={0}>
-        <Grid className={classes.browseheading} item xs={4}>
-          <CreateChallengeCard />
-        </Grid>
-        {challenges.map((doc, i) => (
-          <Grid key={i} className={classes.cards} item xs={4}>
-            <ChallengeCard
-              name={doc.data().name}
-              challengeId={doc.id}
-              uid={doc.data().uid}
-              by={doc.data().By}
-            />
+      <Grid container direction="row" spacing={0}>
+        <Grid item xs={1} />
+        <Grid item xs={10}>
+          <Typography variant="h4" className={classes.browseheading}>
+            Browse Challenges
+          </Typography>
+          <Grid container direction="row" alignItems="center" spacing={0}>
+            <Grid className={classes.browseheading} item xs={4}>
+              <CreateChallengeCard />
+            </Grid>
+
+            {challenges.map((doc, i) => (
+              <Grid key={i} className={classes.cards} item xs={4}>
+                <ChallengeCard
+                  name={doc.data().name}
+                  challengeId={doc.id}
+                  uid={doc.data().uid}
+                  by={doc.data().By}
+                />
+              </Grid>
+            ))}
           </Grid>
-        ))}
+        </Grid>
+
+        <Grid item xs={1} />
       </Grid>
     </div>
   );

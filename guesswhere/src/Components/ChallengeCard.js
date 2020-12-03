@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import firebase from "../firebase";
 import { Rating } from "@material-ui/lab";
+import { CardMedia } from "@material-ui/core";
 
 const db = firebase.firestore();
 
@@ -20,12 +21,16 @@ const useStyles = makeStyles({
     maxHeight: 345,
     maxWidth: 345,
   },
+  media: {
+    height: 140,
+  },
 });
 
 export default function ChallengeCard(props) {
   const classes = useStyles();
   const history = useHistory();
   const [challengeCreatorName, setChallengeCreatorName] = useState("");
+  const [imageUrl, setImageURL] = useState("");
   const routeToChallenge = () => {
     //Added UID to URL path so it could be save with rating and high score
     history.replace({
@@ -42,7 +47,21 @@ export default function ChallengeCard(props) {
     };
     fetchname();
   }, []);
-
+  useEffect(() => {
+    const fetchChallenge = async () => {
+      const challengedata = await db
+        .collection("Challenges")
+        .doc(props.challengeId)
+        .get();
+      const subchallenge = challengedata.data().subchallenges[0];
+      const subChallengedata = await db
+        .collection("Sub-challenges")
+        .doc(subchallenge.id)
+        .get();
+      setImageURL(subChallengedata.data().images[0]);
+    };
+    fetchChallenge();
+  }, []);
   totalRating = 0;
   cnt = 0;
   //Query Firebase for hi score for each chall using props.challengID in where clause to filter
@@ -52,6 +71,11 @@ export default function ChallengeCard(props) {
   return (
     <Card className={classes.root}>
       <CardActionArea onClick={routeToChallenge}>
+        <CardMedia
+          className={classes.media}
+          image={imageUrl}
+          title="Challenge Name"
+        />
         <CardContent>
           <Typography gutterBottom variant="h5">
             {props.name}
