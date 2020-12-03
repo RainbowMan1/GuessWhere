@@ -3,31 +3,33 @@ import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
 import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import Rating from 'material-ui-rating';
+import Rating from "material-ui-rating";
 import firebase from "../firebase";
 import { AuthContext } from "../AuthProvider";
- 
+
 const db = firebase.firestore();
-const url = new URL(window.location.href).pathname.split('/');
+const url = new URL(window.location.href).pathname.split("/");
 const cid = url[2];
 const uid = url[3];
- 
-const handleRating =(value) =>{
-  alert('onChange ' + value);
- 
-  alert (cid);
-  alert (uid);
+
+const handleRating = (value) => {
+  alert("onChange " + value);
+
+  alert(cid);
+  alert(uid);
   //Add CID and UID
-  db.collection('Challenge Rating').add({Rating: value ,ChallengeID: cid,uid: uid});
+  db.collection("Challenge Rating").add({
+    Rating: value,
+    ChallengeID: cid,
+    uid: uid,
+  });
 };
- 
+
 const mapContainer = {
   left: "0%",
   height: "65vh",
   width: "100vw",
 };
-
-
 
 const getMidpoint = (actualMarker, guessMarker) => {
   var lat1 = actualMarker.lat;
@@ -38,13 +40,13 @@ const getMidpoint = (actualMarker, guessMarker) => {
   const lng3 = (lng1 + lng2) / 2;
   return { lat: lat3, lng: lng3 };
 };
- 
+
 const lineSymbol = {
   path: "M 0,-1 0,1",
   strokeOpacity: 1,
   scale: 4,
 };
- 
+
 function ChallengeResult(props) {
   const { currentUser } = useContext(AuthContext);
   const history = useHistory();
@@ -56,15 +58,17 @@ function ChallengeResult(props) {
   for (var i = 0; i < midpoints.length - 1; i++) {
     center = getMidpoint(center, midpoints[i + 1]);
   }
- 
+
   const handleContinue = () => {
     history.replace({ pathname: `/Browse/` });
-    //Add in challID and UID 
-    db.collection('Challenge Leaderboards').add({Score: parseFloat(props.totalPoints),
-    uid: uid,
-    ChallengeID: cid});
+    //Add in challID and UID
+    db.collection("Challenge Leaderboards").add({
+      Score: parseFloat(props.totalPoints),
+      uid: uid,
+      ChallengeID: cid,
+    });
   };
- 
+
   const getPathCoordinates = (total) => {
     const pathArray = [];
     total.forEach((markers) => {
@@ -77,7 +81,7 @@ function ChallengeResult(props) {
     return pathArray;
   };
   const pathCoordinates = getPathCoordinates(props.totalMarkers);
- 
+
   console.log(pathCoordinates);
   return (
     <div>
@@ -135,17 +139,12 @@ function ChallengeResult(props) {
       <Typography variant="h6">
         Your total score is {parseFloat(props.totalPoints)}
       </Typography>
-      <Rating
-      value={5}
-      max={5}
-      onChange={handleRating}
-    />
+      <Rating value={5} max={5} onChange={handleRating} />
       <Button color="primary" variant="contained" onClick={handleContinue}>
         Continue
       </Button>
-    </div>  
+    </div>
   );
 }
- 
+
 export default ChallengeResult;
- 

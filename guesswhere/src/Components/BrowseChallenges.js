@@ -6,7 +6,6 @@ import firebase from "../firebase";
 import ChallengeCard from "./ChallengeCard";
 import CreateChallengeCard from "./CreateChallengeCard";
 
-
 const db = firebase.firestore();
 
 const useStyles = makeStyles((theme) => ({

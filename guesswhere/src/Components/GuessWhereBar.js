@@ -18,6 +18,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import MenuIcon from "@material-ui/icons/Menu";
 
+const db = firebase.firestore();
+
 const useStyles = makeStyles((theme) => ({
   root1: {
     display: "flex",
@@ -76,11 +78,16 @@ export default function GuessWhereBar() {
   }, [open]);
   console.log(currentUser);
   const onLogin = () => {
-    console.log("hello");
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase
       .auth()
       .signInWithPopup(provider)
+      .then(function (result) {
+        var user = result.user;
+        db.collection("Users")
+          .doc(user.uid)
+          .set({ name: user.displayName }, { merge: true });
+      })
       .catch(function (error) {
         // Handle Errors here.
         var errorCode = error.code;
