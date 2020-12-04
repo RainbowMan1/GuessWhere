@@ -119,7 +119,7 @@ export default function GuessWhereBar() {
     <div className={classes.root2}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.home}>
+          <Typography style={{fontStyle:"initial", color:"black", fontWeight:"bold"}} variant="h6"  className={classes.home}>
             GuessWhere
           </Typography>
           {currentUser ? (
@@ -171,7 +171,7 @@ export default function GuessWhereBar() {
                   )}
                 </Popper>
               </div>
-              <Typography variant="h6">{currentUser.displayName}</Typography>
+              <Typography style={{fontStyle:"initial", color:"black", fontWeight:"bold"}} variant="h6">{currentUser.displayName}</Typography>
             </div>
           ) : (
             <Button color="inherit" onClick={onLogin}>

@@ -7,6 +7,7 @@ import { Button, Snackbar, TextField } from "@material-ui/core";
 import SubChallengeBox from "./SubChallengeBox";
 import { v4 as uuidv4 } from "uuid";
 import MuiAlert from "@material-ui/lab/Alert";
+import ParticlesBg  from "particles-bg";
 
 const db = firebase.firestore();
 
@@ -125,8 +126,11 @@ function CreateChallenge(props) {
   }
   return (
     <div>
-      <h2>Create Challenge</h2>
       <div>
+      <h1 style={{fontSize: "40px", textAlign: "center", color:"black"}} >Create Challenge!</h1>
+        <ParticlesBg type="circle" bg={true} />
+      </div>
+      <div style={{fontSize: "20px", textAlign: "center", color: "black"}}>
         <TextField
           id="standard-basic"
           label="Challenge Name"
@@ -134,7 +138,7 @@ function CreateChallenge(props) {
           onChange={handleTextOnChange}
         />
       </div>
-      <div>
+      <div style={{fontSize: "20px", textAlign: "center", color: "black"}}>
         <Button size="small" color="primary" onClick={handleOpen}>
           Add a Sub Challenge
         </Button>

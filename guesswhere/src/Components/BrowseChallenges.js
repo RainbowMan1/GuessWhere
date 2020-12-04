@@ -5,6 +5,7 @@ import { AuthContext } from "../AuthProvider";
 import firebase from "../firebase";
 import ChallengeCard from "./ChallengeCard";
 import CreateChallengeCard from "./CreateChallengeCard";
+import ParticlesBg  from "particles-bg";
 
 const db = firebase.firestore();
 
@@ -35,12 +36,13 @@ function BrowseChallenges(props) {
   }
   return (
     <div>
+      <ParticlesBg type="circle" bg={true} height="1000px" />
       <Grid container direction="row" spacing={0}>
         <Grid item xs={1} />
         <Grid item xs={10}>
-          <Typography variant="h4" className={classes.browseheading}>
+          <h1 variant="h4" style={{fontSize: "50px", textAlign: "center", color: "black"}} className={classes.browseheading}>
             Browse Challenges
-          </Typography>
+          </h1>
           <Grid container direction="row" alignItems="center" spacing={0}>
             <Grid className={classes.browseheading} item xs={4}>
               <CreateChallengeCard />

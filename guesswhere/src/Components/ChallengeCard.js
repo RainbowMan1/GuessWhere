@@ -86,7 +86,7 @@ export default function ChallengeCard(props) {
         </CardContent>
       </CardActionArea>
       <CardContent>
-        <Button size="small" color="primary" onClick={routeToChallenge}>
+        <Button size="small" variant="outlined" color="primary" onClick={routeToChallenge}>
           Play
         </Button>
         <Typography gutterBottom variant="body1">

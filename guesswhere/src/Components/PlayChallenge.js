@@ -6,6 +6,7 @@ import { AuthContext } from "../AuthProvider";
 import firebase from "../firebase";
 import ChallengeResult from "./ChallengeResult";
 import SubChallengeResult from "./SubChallengeResult";
+import ParticlesBg  from "particles-bg";
 
 const db = firebase.firestore();
 
@@ -141,6 +142,10 @@ function PlayChallenge(props) {
   }
   return (
     <div>
+      <div>
+      <h1 style={{fontSize: "40px", textAlign: "center", color:"black"}} >Play Challenge!</h1>
+        <ParticlesBg type="circle" bg={true} />
+      </div>
       <Grid
         container
         direction="row"

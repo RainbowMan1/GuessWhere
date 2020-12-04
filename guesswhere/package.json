@@ -12,13 +12,15 @@
     "@testing-library/user-event": "^12.1.10",
     "firebase": "^8.1.1",
     "material-ui-rating": "^4.2.0",
+    "particles-bg": "^2.5.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-material-ui-carousel": "^2.1.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "uuid": "^8.3.1",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "yarn": "^1.22.10"
   },
   "scripts": {
     "start": "react-scripts start",
