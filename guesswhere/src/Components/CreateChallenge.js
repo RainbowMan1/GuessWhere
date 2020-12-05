@@ -127,9 +127,17 @@ function CreateChallenge(props) {
   return (
     <div>
       <div>
-      <h1 style={{fontSize: "40px", textAlign: "center", color:"black"}} >Create Challenge!</h1>
+      <h1 style={{fontSize: "50px", textAlign: "center", color:"black"}} >Create Challenge!</h1>
         <ParticlesBg type="circle" bg={true} />
       </div>
+      <div
+      style={{
+        align: "center",
+        width: "300px",
+        border: "5px dotted black",
+        padding: "20px",
+        marginLeft: "auto",
+        marginRight: "auto"}} >
       <div style={{fontSize: "20px", textAlign: "center", color: "black"}}>
         <TextField
           id="standard-basic"
@@ -139,7 +147,7 @@ function CreateChallenge(props) {
         />
       </div>
       <div style={{fontSize: "20px", textAlign: "center", color: "black"}}>
-        <Button size="small" color="primary" onClick={handleOpen}>
+        <Button style={{fontSize: "12px", textAlign: "center", color: "black"}} size="small" onClick={handleOpen}>
           Add a Sub Challenge
         </Button>
         <AddSubChallengeModal
@@ -155,14 +163,19 @@ function CreateChallenge(props) {
             handleRemove={handleRemoveSubChallenge}
           />
         ))}
-        <Button
-          size="small"
+      </div>
+      <div style={{textAlign: "center"}}>
+      <Button 
+          style={{fontSize: "15px", color: "black"}}
+          size="medium"
           color="primary"
+          variant="outlined"
           onClick={handleChallengeSubmit}
           disabled={submitDisabled}
         >
           Submit
         </Button>
+      </div>
       </div>
       <Snackbar
         open={snackOpen}
