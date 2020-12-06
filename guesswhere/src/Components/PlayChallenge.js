@@ -6,28 +6,24 @@ import { AuthContext } from "../AuthProvider";
 import firebase from "../firebase";
 import ChallengeResult from "./ChallengeResult";
 import SubChallengeResult from "./SubChallengeResult";
-import ParticlesBg  from "particles-bg";
+import ParticlesBg from "particles-bg";
 
 const db = firebase.firestore();
 
 const mapContainerStyleNoMouse = {
   position: "absolute",
-  left: "50%",
-  top: "100%",
-  height: "30vh",
-  width: "25vw",
-  "-ms-transform": "translate(-50%, -50%)",
-  transform: "translate(-50%, -50%)",
+  left: "80%",
+  top: "74.5%",
+  height: "25vh",
+  width: "19.5vw",
 };
 
 const mapContainerStyleMouse = {
   position: "absolute",
-  left: "50%",
-  top: "100%",
-  height: "40vh",
-  width: "100%",
-  "-ms-transform": "translate(-50%, -50%)",
-  transform: "translate(-50%, -50%)",
+  left: "65%",
+  top: "55%",
+  height: "45vh",
+  width: "34.5vw",
 };
 
 const center = {
@@ -147,73 +143,79 @@ function PlayChallenge(props) {
   return (
     <div>
       <div
-      
-      style={{
-        position: "fixed", 
-        top:"0", 
-        left:"0", 
-        width:"100%", 
-        height:"100%",
-        zIndex: "-1"
-      }}
+        style={{
+          position: "fixed",
+          top: "0",
+          left: "0",
+          width: "100%",
+          height: "100%",
+          zIndex: "-1",
+        }}
       >
         <ParticlesBg type="circle" bg={true} />
       </div>
-        <div>
-        <h1 style={{fontSize: "40px", textAlign: "center", color:"black"}} >Play Challenge!</h1>
-        </div>
       <div>
-      <Grid
-        container
-        direction="row"
-        alignItems="center"
-        justify="center"
-        spacing={0}
-      >
-        <Grid item xs={"auto"} sm={2} md={2} lg={2} />
-        <Grid item xs={12} sm={8} md={8} lg={8}>
-          <Carousel
-           >
-            {subchallenges[currentChallenge].images.map((item, i) => (
-              <img 
-                style={{
-                align: "center",
-                display:"block",
-                width: "auto",
-                border: "5px dotted black",
-                padding: "20px",
-                marginLeft: "auto",
-                marginRight: "auto"
-              }}
-              src={item} alt={i} key={i} height={"450"} width={"700"} marginLeft= {"auto"}
-              marginRight= {"auto"} class={"center"}/>
-            ))}
-          </Carousel>
-        </Grid>
-        <Grid item xs={"auto"} sm={2} md={2} lg={2} />
-      </Grid>
+        <h1 style={{ fontSize: "40px", textAlign: "center", color: "black" }}>
+          Play Challenge!
+        </h1>
       </div>
       <div>
-      <Button
-            color="primary"
-            variant="contained"
-            size="large"
-            disabled={marker === null}
-            onClick={handleGuess}
-
-            style={{
-              position: "aboslute", 
-              top: "50%",
-              left: "50%",
-              display:"block",
-              align:"center",
-              "-ms-transform": "translate(-50%, -50%)",
-              transform: "translate(-50%, -50%)",
-            
-            }}
-          >
-            Guess
-          </Button>
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
+          justify="center"
+          spacing={0}
+        >
+          <Grid item xs={"auto"} sm={2} md={2} lg={2} />
+          <Grid item xs={12} sm={8} md={8} lg={8}>
+            <Carousel>
+              {subchallenges[currentChallenge].images.map((item, i) => (
+                <img
+                  style={{
+                    align: "center",
+                    display: "block",
+                    width: "auto",
+                    border: "5px dotted black",
+                    padding: "20px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                  src={item}
+                  alt={i}
+                  key={i}
+                  height={"450"}
+                  width={"700"}
+                  marginLeft={"auto"}
+                  marginRight={"auto"}
+                  class={"center"}
+                />
+              ))}
+            </Carousel>
+          </Grid>
+          <Grid item xs={"auto"} sm={2} md={2} lg={2} />
+        </Grid>
+      </div>
+      <div>
+        <Button
+          color="primary"
+          variant="contained"
+          size="large"
+          disabled={marker === null}
+          onClick={handleGuess}
+          style={{
+            position: "aboslute",
+            "margin-top": "18px",
+            top: "50%",
+            left: "50%",
+            display: "block",
+            align: "center",
+            "-ms-transform": "translate(-50%, -50%)",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          Guess
+        </Button>
       </div>
       <div onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
         <GoogleMap
@@ -236,8 +238,8 @@ function PlayChallenge(props) {
               marginLeft: "auto",
               marginRight: "auto",
 
-              position: "fixed", 
-              bottom:"0",
+              position: "fixed",
+              bottom: "0",
             }}
           />
         </GoogleMap>
