@@ -61,7 +61,7 @@ function BrowseChallenges(props) {
           <h1 variant="h4" style={{fontSize: "50px", textAlign: "center", color: "black"}} className={classes.browseheading}>
             Browse Challenges
           </h1>
-          <Grid container direction="row" alignItems="center" spacing={0}>
+          <Grid container direction="row" alignItems="center" spacing={5}>
             <Grid className={classes.browseheading} item xs={4}>
               <CreateChallengeCard />
             </Grid>

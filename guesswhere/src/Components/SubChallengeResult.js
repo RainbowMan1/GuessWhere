@@ -88,6 +88,7 @@ function SubChallengeResult(props) {
   };
   return (
     <div>
+      <h1 style={{fontSize: "30px", textAlign: "center"}} >Challenge Results</h1>
       <GoogleMap mapContainerStyle={mapContainer} zoom={3} center={center}>
         <Marker
           position={props.Markers.actual}
@@ -124,6 +125,17 @@ function SubChallengeResult(props) {
           }}
         />
       </GoogleMap>
+
+      <div
+      style={{
+        align: "center",
+        width: "auto",
+        border: "5px dotted black",
+        padding: "20px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        textAlign: "center",}}
+      >
       <Typography variant="h6">
         Your Guess was {distance} miles away from the actual location. You get{" "}
         {points}/1000 points.
@@ -131,6 +143,7 @@ function SubChallengeResult(props) {
       <Button color="primary" variant="contained" onClick={handleContinue}>
         Continue
       </Button>
+      </div>
     </div>
   );
 }

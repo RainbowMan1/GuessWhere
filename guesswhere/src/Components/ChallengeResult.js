@@ -136,6 +136,17 @@ function ChallengeResult(props) {
           );
         })}
       </GoogleMap>
+
+      <div
+      style={{
+        align: "center",
+        width: "auto",
+        border: "5px dotted black",
+        padding: "20px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        textAlign: "center",}}
+      >
       <Typography variant="h6">
         Your total score is {parseFloat(props.totalPoints)}
       </Typography>
@@ -143,6 +154,8 @@ function ChallengeResult(props) {
       <Button color="primary" variant="contained" onClick={handleContinue}>
         Continue
       </Button>
+      </div>
+
     </div>
   );
 }
