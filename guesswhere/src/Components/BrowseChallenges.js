@@ -36,10 +36,28 @@ function BrowseChallenges(props) {
   }
   return (
     <div>
-      <ParticlesBg type="circle" bg={true} height="1000px" />
+  
+
+      <div>
       <Grid container direction="row" spacing={0}>
         <Grid item xs={1} />
         <Grid item xs={10}>
+          
+      
+      <div
+      
+      style={{
+        position: "fixed",
+        top:"0", 
+        left:"0", 
+        width:"100%", 
+        height:"100%",
+        zIndex: "-1"
+      }}
+      >
+      <ParticlesBg type="circle" bg={true} height="1000px" />
+      </div>
+      
           <h1 variant="h4" style={{fontSize: "50px", textAlign: "center", color: "black"}} className={classes.browseheading}>
             Browse Challenges
           </h1>
@@ -63,6 +81,7 @@ function BrowseChallenges(props) {
 
         <Grid item xs={1} />
       </Grid>
+      </div>
     </div>
   );
 }

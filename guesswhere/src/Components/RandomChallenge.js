@@ -12,18 +12,22 @@ const db = firebase.firestore();
 
 const mapContainerStyleNoMouse = {
   position: "absolute",
-  left: "80%",
-  top: "74.5%",
-  height: "25vh",
-  width: "19.5vw",
+  left: "50%",
+  top: "100%",
+  height: "40vh",
+  width: "25vw",
+  "-ms-transform": "translate(-50%, -50%)",
+  transform: "translate(-50%, -50%)",
 };
 
 const mapContainerStyleMouse = {
   position: "absolute",
-  left: "65%",
-  top: "55%",
-  height: "45vh",
-  width: "34.5vw",
+  left: "50%",
+  top: "100%",
+  height: "50vh",
+  width: "100%",
+  "-ms-transform": "translate(-50%, -50%)",
+  transform: "translate(-50%, -50%)",
 };
 
 const center = {
@@ -155,10 +159,24 @@ function RandomChallenge(props) {
   }
   return (
     <div>
-      <div>
-      <h1 style={{fontSize: "40px", textAlign: "center", color:"black"}} >Random Challenge!</h1>
-      <ParticlesBg type="circle" bg={true} />
+      <div
+      
+      style={{
+        position: "fixed", 
+        top:"0", 
+        left:"0", 
+        width:"100%", 
+        height:"100%",
+        zIndex: "-1"
+      }}
+      >
+        <ParticlesBg type="circle" bg={true} />
       </div>
+        <div>
+        <h1 style={{fontSize: "40px", textAlign: "center", color:"black"}} >Random Challenge!</h1>
+      </div>
+
+      <div>
       <Grid
         container
         direction="row"
@@ -170,21 +188,47 @@ function RandomChallenge(props) {
         <Grid item xs={12} sm={8} md={8} lg={8}>
           <Carousel>
             {subchallenges[currentChallenge].images.map((item, i) => (
-              <img src={item} alt={i} key={i} height={"550"} width={"800"} />
+              <img 
+              style={{
+                align: "center",
+                display:"block",
+                width: "auto",
+                border: "5px dotted black",
+                padding: "20px",
+                marginLeft: "auto",
+                marginRight: "auto"
+              }}
+              src={item} alt={i} key={i} height={"450"} width={"700"} marginLeft= {"auto"}
+              marginRight= {"auto"} class={"center"} />
             ))}
           </Carousel>
-          <Button
+        </Grid>
+        <Grid item xs={"auto"} sm={2} md={2} lg={2} />
+      </Grid>
+      </div>
+
+      <div>
+      <Button
             color="primary"
             size="large"
             variant="contained"
             disabled={marker === null}
             onClick={handleGuess}
+
+            style={{
+              position: "aboslute", 
+              top: "50%",
+              left: "50%",
+              display:"block",
+              align:"center",
+              "-ms-transform": "translate(-50%, -50%)",
+              transform: "translate(-50%, -50%)",
+            
+            }}
           >
             Guess
           </Button>
-        </Grid>
-        <Grid item xs={"auto"} sm={2} md={2} lg={2} />
-      </Grid>
+      </div>
       <div onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
         <GoogleMap
           mapContainerStyle={mapstyle}
@@ -199,6 +243,16 @@ function RandomChallenge(props) {
               origin: new window.google.maps.Point(0, 0),
               anchor: new window.google.maps.Point(15, 15),
               scaledSize: new window.google.maps.Size(30, 30),
+            }}
+
+            style={{
+              align: "center",
+              width: "auto",
+              marginLeft: "auto",
+              marginRight: "auto",
+
+              position: "fixed", 
+              bottom:"0",
             }}
           />
         </GoogleMap>
