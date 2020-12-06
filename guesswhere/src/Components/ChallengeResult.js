@@ -61,12 +61,6 @@ function ChallengeResult(props) {
 
   const handleContinue = () => {
     history.replace({ pathname: `/Browse/` });
-    //Add in challID and UID
-    db.collection("Challenge Leaderboards").add({
-      Score: parseFloat(props.totalPoints),
-      uid: uid,
-      ChallengeID: cid,
-    });
   };
 
   const getPathCoordinates = (total) => {
@@ -138,24 +132,24 @@ function ChallengeResult(props) {
       </GoogleMap>
 
       <div
-      style={{
-        align: "center",
-        width: "auto",
-        border: "5px dotted black",
-        padding: "20px",
-        marginLeft: "auto",
-        marginRight: "auto",
-        textAlign: "center",}}
+        style={{
+          align: "center",
+          width: "auto",
+          border: "5px dotted black",
+          padding: "20px",
+          marginLeft: "auto",
+          marginRight: "auto",
+          textAlign: "center",
+        }}
       >
-      <Typography variant="h6">
-        Your total score is {parseFloat(props.totalPoints)}
-      </Typography>
-      <Rating value={5} max={5} onChange={handleRating} />
-      <Button color="primary" variant="contained" onClick={handleContinue}>
-        Continue
-      </Button>
+        <Typography variant="h6">
+          Your total score is {parseFloat(props.totalPoints)}
+        </Typography>
+        <Rating value={5} max={5} onChange={handleRating} />
+        <Button color="primary" variant="contained" onClick={handleContinue}>
+          Continue
+        </Button>
       </div>
-
     </div>
   );
 }
